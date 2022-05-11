@@ -7,7 +7,7 @@ The command-line program `treedist` takes as input two or more treefiles and com
 
 ## Availability
 
-The `sumt` source code is available on GitHub: https://github.com/agormp/treedist. The executable can be installed from PyPI: https://pypi.org/project/treedist/
+The `treedist` source code is available on GitHub: https://github.com/agormp/treedist. The executable can be installed from PyPI: https://pypi.org/project/treedist/
 
 ## Installation
 
