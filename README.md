@@ -22,7 +22,8 @@ python3 -m pip install treedist
 ## Overview
 
 * Input:
-	* Two or more files containing phylogenetic trees (all trees must have same leaf names), in NEXUS or Newick format.
+	* Two or more files containing phylogenetic trees in NEXUS or Newick format
+	* Trees do not need to have identical leafs, but each pair of trees need to share at least 4 leafs (all leafs that are not shared will be automatically pruned before computing tree distances).
 * Output:
 	* Different measures of treesimilarity (Robinson-Fould's symmetric distance, normalised RF, normalised similarity)
 	* Summaries of what bipartitions that differ or are shared between trees
