@@ -3,7 +3,8 @@
 # (only first tree in each file is considered)
 # Can also print other measures, and details concerning how many and which bipartitions that differ between trees
 
-import sys, os.path, treelib, itertools
+import sys, os.path, itertools
+import phylotreelib as treelib
 from optparse import OptionParser
 
 # Build commandline parser
@@ -40,15 +41,15 @@ parser.add_option("-n", "--namesummary", action="store_true", dest="namesummary"
 
 parser.add_option("--collapselen", type="string", dest="collapselen", metavar="BRLEN[,BRLEN,...]",
                         help="Collapse branches shorter than this (comma-separated list: individual cutoffs for trees)")
-                    
+
 parser.add_option("--collapsefrac", type="string", dest="collapsefrac", metavar="FRAC",
                         help="Collapse branches shorter than FRAC fraction of treeheight (of minimum variance rooted tree)")
-                    
+
 parser.add_option("--collapsesupport", type="string", dest="collapsesupport", metavar="SUPPORT",
                         help="Collapse branches with less clade support than this (must be number in [0,1])")
-                    
+
 parser.set_defaults(format="newick", symnormdist=False, symdist=False,
-                    numbers=False, uniqlist=False, commonlist=False, oneline=False, namesummary=False, 
+                    numbers=False, uniqlist=False, commonlist=False, oneline=False, namesummary=False,
                     collapselen=None, collapsefrac=None, collapsesupport=None)
 
 # Parse commandline, open treefiles and get trees (if file names are given and files exist)
@@ -106,7 +107,7 @@ for tree in tree_list:
             tree.remove_leaf(leaf)
         removelist = list(remove_set)   # This is just from last tree in treelist??? Should perhaps create cumulated list of discarded leaves
         removelist.sort()
-            
+
 # If requested: collapse branches shorter than collapsefrac fraction of treeheight (after minvar rooting)
 # First computes branch length cutoff from frac cutoff for each tree, then uses collapselen to do work
 if options.collapsefrac:
@@ -121,7 +122,7 @@ if options.collapsefrac:
         cutoff = options.collapsefrac * tree.height
         brlencutoffs.append(cutoff)
 
-# If requested: collapse short branches                        
+# If requested: collapse short branches
 if options.collapselen:
     for i in range(len(tree_list)):
         tree = tree_list[i]
@@ -184,7 +185,7 @@ for tree1, tree2 in itertools.combinations(tree_list, 2):
     tree1_biparts = bipart_list[tree1]
     if options.labels:
         tree1_bipdict = tree1.bipdict()
-    
+
     # Find bipartitions for tree2
     tree2_biparts = bipart_list[tree2]
     if options.labels:
@@ -226,7 +227,7 @@ for tree1, tree2 in itertools.combinations(tree_list, 2):
                 else:
                     first = names2
                     second = names1
-                    
+
                 for name in first:
                     sys.stdout.write(name + " ")
                 sys.stdout.write("  #   ")
@@ -245,7 +246,7 @@ for tree1, tree2 in itertools.combinations(tree_list, 2):
                 elif not printlab1 and printlab2:
                     lab2 = tree2_bipdict[bipartition].label
                     print("\n    Branch label for bipartition:  %s: %s\n" % (tree2.name,lab2))
-    
+
 
     # Print results
     if options.oneline:
@@ -261,24 +262,24 @@ for tree1, tree2 in itertools.combinations(tree_list, 2):
             print("\n    Total number of bipartitions:  %s: %3d    %s: %3d" % (tree1.name, num_bip1, tree2.name, num_bip2))
             print("    Number of unique bipartitions: %s: %3d    %s: %3d" % (tree1.name, num_uniq1, tree2.name, num_uniq2))
             print("    Number of shared bipartitions: %d" % (num_shared))
-            
+
         if options.uniqlist:
             print("\n    List of unique bipartitions in %s:" % (tree1.name))
             if num_uniq1 == 0:
                 print("        no unique biparts\n")
             else:
                 print_biparts(tree1_unique_biparts, printlab1=options.labels)
-            
+
             print("\n    List of unique bipartitions in %s" % (tree2.name))
             if num_uniq2 == 0:
                 print("        no unique biparts\n")
-            else: 
+            else:
                 print_biparts(tree2_unique_biparts, printlab2=options.labels)
             print("")
         if options.commonlist:
             print("\n    List of bipartitions present in both trees\n")
             print_biparts(shared_biparts, printlab1=options.labels, printlab2=options.labels)
-            
+
         if options.namesummary:
             print("\n    Leaves present in both trees (N = {}):\n".format(len(sharedlist)))
             for name in sharedlist:
@@ -290,4 +291,4 @@ for tree1, tree2 in itertools.combinations(tree_list, 2):
 
 if options.oneline:
     sys.stdout.write("\n")
-                
+
