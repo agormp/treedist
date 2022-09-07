@@ -124,7 +124,7 @@ def main():
         for i in range(len(tree_list)):
             tree = tree_list[i]
             tree.rootminvar()
-            cutoff = options.collapsefrac * tree.height
+            cutoff = options.collapsefrac * tree.height()
             brlencutoffs.append(cutoff)
 
     # If requested: collapse short branches
@@ -135,15 +135,15 @@ def main():
             unchecked_parents = tree.intnodes.copy()
             while(unchecked_parents):
                 parent = unchecked_parents.pop()
-                unchecked_children = tree.children(parent) & tree.intnodes  # Set intersection: do not check leaves
+                unchecked_children = tree.children(parent) & tree.intnodes  # only consider branches to intnodes
                 while unchecked_children:
                     child = unchecked_children.pop()
                     blen = tree.tree[parent][child].length
                     if blen <= cutoff:
                         grand_children = tree.children(child) & tree.intnodes
                         unchecked_children.update(grand_children)    # Add child's children to parent
-                        unchecked_parents.remove(child)
                         tree.remove_branch(parent, child)
+                        unchecked_parents.discard(child)    # Child no longer in tree. Remove from unchecked parents if in that list
 
     # If requested: collapse branches with low branch support
     if options.collapsesupport:
