@@ -1,6 +1,6 @@
 # treedist: command line program for quantifying differences between phylogenetic trees
 
-![](https://img.shields.io/badge/version-1.0.0-blue)
+![](https://img.shields.io/badge/version-1.0.1-blue)
 
 The command-line program `treedist` takes as input two or more treefiles and computes various measures of the "distance" between pairs of trees. The program can also output information about how many and what bipartitions differ between trees.
 
